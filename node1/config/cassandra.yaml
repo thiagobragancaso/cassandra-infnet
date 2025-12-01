@@ -1,0 +1,19 @@
+cluster_name: 'NYC_TAXI'
+num_tokens: 256
+partitioner: org.apache.cassandra.dht.Murmur3Partitioner
+
+listen_address: 172.18.0.3
+broadcast_address: 172.18.0.3
+
+rpc_address: 0.0.0.0
+broadcast_rpc_address: 172.18.0.3
+authenticator: AllowAllAuthenticator
+seed_provider:
+  - class_name: org.apache.cassandra.locator.SimpleSeedProvider
+    parameters:
+      - seeds: "172.18.0.3"
+
+endpoint_snitch: SimpleSnitch
+auto_bootstrap: false
+commitlog_sync: periodic
+commitlog_sync_period: 10000ms

@@ -1,0 +1,42 @@
+services:
+  cassandra-node-1:
+    container_name: infnet-cassandra1
+    hostname: cassandra-node-1
+    image: cassandra
+    ports:
+      - "9043:9042"
+    volumes:
+      - ./node1/config/cassandra.yaml:/etc/cassandra/cassandra.yaml
+      - ./node1/config/cassandra-rackdc.properties:/etc/cassandra/cassandra-rackdc.properties
+      - ./node1/data:/var/lib/cassandra/data
+      - ./node1/commitlog:/var/lib/cassandra/commitlog
+      - ./node1/hints:/var/lib/cassandra/hints
+      - ./node1/saved_caches:/var/lib/cassandra/saved_caches
+    environment:
+      MAX_HEAP_SIZE: 2048m
+    networks:
+      - cassandra-infnet
+
+  cassandra-node-2:
+    container_name: infnet-cassandra2
+    hostname: cassandra-node-2
+    image: cassandra
+    ports:
+      - "9044:9042"
+    volumes:
+      - ./node2/config/cassandra.yaml:/etc/cassandra/cassandra.yaml
+      - ./node2/config/cassandra-rackdc.properties:/etc/cassandra/cassandra-rackdc.properties
+      - ./node2/data:/var/lib/cassandra/data
+      - ./node2/commitlog:/var/lib/cassandra/commitlog
+      - ./node2/hints:/var/lib/cassandra/hints
+      - ./node2/saved_caches:/var/lib/cassandra/saved_caches
+    environment:
+      MAX_HEAP_SIZE: 2048m
+      CASSANDRA_SEEDS: cassandra-node-1
+      CASSANDRA_AUTO_BOOTSTRAP: false
+    networks:
+      - cassandra-infnet
+
+networks:
+  cassandra-infnet:
+    driver: bridge
